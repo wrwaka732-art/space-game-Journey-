@@ -16,6 +16,9 @@ html,body{height:100%;margin:0;background:#050a1a;overflow:hidden;touch-action:n
 canvas{position:fixed;inset:0;width:100%;height:100%}
 .pnl{background:linear-gradient(#d6dbe3,#a9b1bf);border:2px solid #7d8696;border-radius:6px;box-shadow:0 0 0 2px #000a,inset 0 0 0 1px #fffa;color:#2b3345}
 #top{position:fixed;top:calc(env(safe-area-inset-top,0px) + 6px);left:50%;transform:translateX(-50%);width:min(430px,92vw);padding:4px 8px 6px;font-size:13px}
+#tbtn{position:fixed;top:calc(env(safe-area-inset-top,0px) + 6px);left:8px;z-index:3;display:flex;gap:6px;direction:ltr}
+#tbtn .ib{width:36px;height:32px;line-height:28px;font-size:17px}
+body.mob #tbtn{top:calc(env(safe-area-inset-top,0px) + 3px)}body.mob #tbtn .ib{width:28px;height:24px;line-height:20px;font-size:13px}
 #top .r{display:flex;align-items:center;justify-content:space-between;gap:6px}
 #top b{font-weight:600;letter-spacing:.5px}
 .ib{background:#e7eaf0;border:2px solid #6c7588;border-radius:4px;width:26px;height:22px;line-height:18px;text-align:center;cursor:pointer;font-size:13px;color:#2b3345}
@@ -129,8 +132,9 @@ body.mob #hint{bottom:58px;font-size:10px}
 </head>
 <body>
 <canvas id="c"></canvas>
+<div id="tbtn"><span class="ib" id="bs">☰</span><span class="ib" id="bh">🏠</span><span class="ib" id="bp">⏸</span></div>
 <div id="top" class="pnl">
- <div class="r"><b>رحلة تجريبية للفضاء</b><span style="display:flex;gap:4px"><span class="ib" id="bp">⏸</span><span class="ib" id="bs">☰</span><span class="ib" id="bh">🏠</span></span></div>
+ <div class="r"><b>رحلة تجريبية للفضاء</b></div>
  <div id="hb"><div id="hf"></div></div>
  <div id="inv"><span id="hp"></span><span id="iv"></span></div>
 </div>
@@ -145,8 +149,8 @@ body.mob #hint{bottom:58px;font-size:10px}
 </div>
 <div id="menu" class="ov on">
  <div class="col"><div class="ttl">🚀 رحلة إلى الفضاء</div>
-  <button class="px play" onclick="showDiff()">Play</button>
-  <div class="row2"><button class="px sm gold" onclick="showShop()">🛒 المتجر</button><button class="px sm" onclick="setOpen(1)">⚙️ الإعدادات</button><button class="px sm gold" onclick="mpOpen()">🌐 أونلاين</button></div>
+  <button class="px play" onclick="showDiff(0)">Play</button>
+  <div class="row2"><button class="px sm gold" onclick="showShop()">🛒 المتجر</button><button class="px sm" onclick="setOpen(1)">⚙️ الإعدادات</button><button class="px sm gold" onclick="mpOpen()">🌐 أونلاين</button><button class="px sm" onclick="showDiff(1)">♾️ Endless</button></div>
   <button class="px exit" onclick="doExit()">Exit</button>
   <div id="mc"></div></div>
  <div class="scene"><svg viewBox="0 0 160 90" aria-hidden="true">
@@ -164,10 +168,10 @@ body.mob #hint{bottom:58px;font-size:10px}
   <rect x="112" y="78" width="10" height="10" fill="url(#pg)"/><rect x="114" y="80" width="6" height="8" fill="#0b0f2e"/><rect x="112" y="78" width="10" height="2" fill="#b5d93d"/>
  </svg></div>
 </div>
-<div id="dfo" class="ov"><h2 class="mt w" style="font-size:clamp(22px,5vw,44px)">اختر الصعوبة</h2>
+<div id="dfo" class="ov"><h2 id="dft" class="mt w" style="font-size:clamp(22px,5vw,44px)">اختر الصعوبة</h2>
  <div class="dl" id="dfl"></div>
  <button class="mb" onclick="showMenu()">رجوع</button></div>
-<div id="nmo" class="ov"><div class="pnl" style="width:min(380px,90vw);padding:14px;text-align:center">
+<div id="nmo" class="ov spc"><div class="pnl" style="width:min(380px,90vw);padding:14px;text-align:center">
  <svg viewBox="0 0 120 50" style="width:100%;max-width:280px;height:auto;display:block;margin:0 auto 8px;border-radius:8px;background:#0b0f2e;border:2px solid #3a4180;shape-rendering:crispEdges" aria-hidden="true">
  <g class="tw" fill="#fff"><rect x="8" y="6" width="1" height="1"/><rect x="26" y="40" width="1" height="1"/><rect x="52" y="9" width="1" height="1"/><rect x="70" y="42" width="1" height="1"/><rect x="108" y="40" width="1" height="1"/><rect x="40" y="26" width="1" height="1"/></g>
  <circle cx="100" cy="14" r="9" fill="#c86bff"/><rect x="88" y="13" width="24" height="2" fill="#ffd0ff"/><circle cx="14" cy="36" r="4" fill="#ff9a3a"/>
@@ -202,7 +206,7 @@ body.mob #hint{bottom:58px;font-size:10px}
 <div id="mpr" class="ov spc"><div id="mpt" style="font-size:28px"></div><div id="mpd" style="font-size:20px"></div><button class="btn" onclick="mpAgain()">🔁 العب مجدداً</button><button class="btn" onclick="mpClose()">القائمة</button></div>
 <div id="dmo" class="ov"><div style="font-size:30px">💥 لقد خسرت</div><button class="btn" onclick="mpClose()">🏠 القائمة</button><button class="btn" onclick="$('dmo').classList.remove('on')">👁️ مشاهدة صديقك</button></div>
 <div id="inv2" class="ov"><div id="invt" style="font-size:24px;text-align:center;padding:0 12px"></div><button class="btn" onclick="mpAcc()">✅ قبول</button><button class="btn" style="background:#e7eaf0;border-color:#6c7588;color:#2b3345" onclick="mpDec()">❌ رفض</button></div>
-<div id="mpi" style="display:none;position:fixed;top:calc(env(safe-area-inset-top,0px) + 6px);left:8px;z-index:2;background:#000a;color:#fff;font-size:12px;padding:3px 9px;border-radius:10px;pointer-events:none"></div>
+<div id="mpi" style="display:none;position:fixed;top:calc(env(safe-area-inset-top,0px) + 46px);left:8px;z-index:2;background:#000a;color:#fff;font-size:12px;padding:3px 9px;border-radius:10px;pointer-events:none"></div>
 <div id="wmap" class="ov"></div>
 <div id="shp" class="ov"></div>
 <div id="lvw" class="ov"><div id="lvt" style="font-size:26px"></div><div id="lvr" style="font-size:20px"></div><button class="btn" onclick="nextLevel()">المرحلة التالية ▶</button><button class="btn" onclick="showMap()">الخريطة 🗺️</button></div>
@@ -313,8 +317,9 @@ const sgN=()=>P.cells.filter(c=>c.sg).length,pn=()=>P.cells.filter(c=>c.t=='w'&&
 const gCost=()=>{const left=wCap()-pn();return left<=0?0:20};
 
 const DFL=[[.7,'سهل','😌'],[1,'عادي','🙂'],[1.4,'صعب','😤'],[2,'جنوني 🔥','💀']];
-function showDiff(){mpRd();$('dfl').innerHTML=DFL.map(([v,n,e])=>`<button class="mb ${CFG.diff===v?'cur':''}" onclick="pickDiff(${v})">${e} ${n}</button>`).join('');show('dfo')}
-function pickDiff(v){CFG.diff=v;save();if(P)capGuns();sfx(660,.08,'triangle',.4);showMap()}
+let ENDLESS=0,BESTW=0;try{BESTW=+localStorage.getItem('best_wave')||0}catch(e){}
+function showDiff(e){ENDLESS=e?1:0;$('dft').textContent=e?'♾️ Endless · اختر الصعوبة':'اختر الصعوبة';mpRd();$('dfl').innerHTML=DFL.map(([v,n,e])=>`<button class="mb ${CFG.diff===v?'cur':''}" onclick="pickDiff(${v})">${e} ${n}</button>`).join('');show('dfo')}
+function pickDiff(v){CFG.diff=v;save();if(P)capGuns();sfx(660,.08,'triangle',.4);if(ENDLESS)startLevel(0,1);else showMap()}
 const NX=i=>90+i*91,NY=[250,330,300,230,150,210,300,340,260,170];
 function showMap(w,l){if(w==null){const m=Math.min(PL.length*10-1,meta.max);w=m/10|0;l=m%10+1}mw=w;ml=l;drawMap();show('wmap')}
 function mapSel(w,l){mw=w;ml=l;drawMap();sfx(660,.08,'triangle',.4)}
@@ -437,7 +442,7 @@ function upd(dt){
   if(r<P.rad+6){d.got=1;if(d.k=='f'){Q.pu++;pw.rf=8;ban('⚡ إطلاق سريع!');sfx(1200,.25,'square',.6)}else if(d.k=='s'){Q.pu++;pw.sh=8;ban('🛡️ درع!');sfx(500,.3,'sine',.7)}else{Q.it++;P.inv[d.k]++;sfx(900,.08,'sine',.5)}}}
  D=D.filter(d=>!d.got);
  for(const p of PT){p.x+=p.vx*dt;p.y+=p.vy*dt;p.l-=dt}PT=PT.filter(p=>p.l>0);shake*=.88;
- if(P.hp<=0){over=true;shake=0;boom(P.x,P.y,['#ffb347','#ff5a3a','#fff','#cfd8e8'],50);saveGame();const nb=pts>(+localStorage.getItem('best')||0);if(nb)try{localStorage.setItem('best',pts)}catch(_){}document.getElementById('sc').textContent='دمّرت '+score+' مركبة · النقاط '+pts+(nb?' 🏆 رقم قياسي جديد!':' · أفضل: '+(localStorage.getItem('best')||0));setTimeout(()=>{if(mode=='play')document.getElementById('over').classList.add('on')},700)}
+ if(P.hp<=0){over=true;shake=0;boom(P.x,P.y,['#ffb347','#ff5a3a','#fff','#cfd8e8'],50);saveGame();const nb=pts>(+localStorage.getItem('best')||0);if(nb)try{localStorage.setItem('best',pts)}catch(_){}document.getElementById('sc').textContent='دمّرت '+score+' مركبة · النقاط '+pts+(nb?' 🏆 رقم قياسي جديد!':' · أفضل: '+(localStorage.getItem('best')||0))+(WV.on&&WV.endless?' · 🌊 وصلت للموجة '+ar(WV.n)+' · أفضل موجة '+ar(BESTW):'');setTimeout(()=>{if(mode=='play')document.getElementById('over').classList.add('on')},700)}
  hud()}
 const hc={},hEl={};
 function hset(id,v,prop){if(hc[id+prop]===v)return;hc[id+prop]=v;const e=hEl[id]||(hEl[id]=document.getElementById(id));if(prop==='w')e.style.width=v;else if(prop==='o')e.style.opacity=v;else if(prop==='c')e.className=v;else e.textContent=v}
@@ -506,7 +511,7 @@ function draw(){
  ctx.restore();
  if(!over&&flag){const fx=flag.x-cx,fy=flag.y-cy,ox=fx<30||fx>W-30||fy<160*u||fy>H-130*u,qx=Math.min(W-30,Math.max(30,fx)),qy=Math.min(H-130*u,Math.max(160*u,fy));if(ox)dtxt('🚩','28px sans-serif','#fff',qx,qy)}
  if(!over){
- dtxt('🪐 '+PL[pl].n+' · م'+cur.l+(bph?' 👑'+(crazy()?' '+ar(Math.min(bsd+1,NB()))+'/'+ar(NB()):''):' ('+(kills|0)+'/'+goal+')')+'   🪙 '+meta.coins+'   ⭐ '+pts+(combo>1?'   🔥 x'+(1+(combo/4|0))+' ('+combo+')':''),fz(20),'#fff',W/2,96*u+tp);
+ dtxt('🪐 '+PL[pl].n+(WV.on&&WV.endless?' · ♾️ '+ar(WV.n):' · م'+cur.l)+(bph?' 👑'+(crazy()?' '+ar(Math.min(bsd+1,NB()))+'/'+ar(NB()):''):' ('+(kills|0)+'/'+goal+')')+'   🪙 '+meta.coins+'   ⭐ '+pts+(combo>1?'   🔥 x'+(1+(combo/4|0))+' ('+combo+')':''),fz(20),'#fff',W/2,96*u+tp);
  if(pw.rf>0)dtxt('⚡ '+Math.ceil(pw.rf),fz(15),'#ff4aff',W/2-50*u,120*u+tp);if(pw.sh>0)dtxt('🛡️ '+Math.ceil(pw.sh),fz(15),'#7dff9a',W/2+50*u,120*u+tp);
  {const q=QS[qi];dtxt(q?'📜 '+q[0]+' ('+Math.min(q[2],q[1]())+'/'+q[2]+')':'📜 خلصت كل المهام! 🎉',fz(15),'#9fe8ff',W/2,146*u+tp)}
  if(bannerT>0){ctx.globalAlpha=Math.min(1,bannerT);dtxt(banner,fz(34),'#ffe23a',W/2,WV.on?H*.75:H*.3);ctx.globalAlpha=1}}
@@ -516,15 +521,16 @@ let last=performance.now();function loop(t){const dt=Math.min(.05,(t-last)/1e3);
 rs();chkRot();applyUI();start();hud();showMenu();applyLang();requestAnimationFrame(loop);
 /* ---------- أونلاين ---------- */
 /* ---------- نظام الموجات (فردي + تعاوني، كل الصعوبات) ---------- */
-const WV={on:0,n:1,N:5,cd:0,im:0,wd:0,pwd:0,KILLS:20};
-function wvBegin(n){WV.n=n;WV.wd=0;WV.pwd=0;WV.im=0;kills=0;MP.lk=0;bph=0;bsn=0;bsd=0;nbT=0;bk=0;bossT=1e9;done=false;E=[];spawnT=1.2;goal=WV.KILLS;if(MP.on)cur.l=n;flag=null;
-  ban('🌊 الموجة '+ar(n)+' من '+ar(WV.N)+' — اقتل '+ar(WV.KILLS)+' وحش ثم '+(NB()>1?ar(NB())+' زعماء':'زعيم'));sfx(520,.3,'triangle',.8);mpSend({t:'wn',n})}
-function wvDone(){WV.wd=1;mpSend({t:'wd',n:WV.n});sfx(900,.3,'triangle',.7);ban('✅ أنهيت الموجة '+ar(WV.n)+(!MP.on||WV.pwd>=WV.n||MP.pd?'':' — بانتظار صاحبك'))}
+const WV={on:0,n:1,N:10,endless:0,cd:0,im:0,wd:0,pwd:0,KILLS:20};
+function wvBegin(n){if(WV.endless&&!MP.on){const b=crazy()?20:10;WV.KILLS=Math.min(30,b+(n-1)*(crazy()?1:2));pl=((n-1)/3|0)%PL.length;if(n>BESTW){BESTW=n;try{localStorage.setItem('best_wave',n)}catch(e){}}}
+  WV.n=n;WV.wd=0;WV.pwd=0;WV.im=0;kills=0;MP.lk=0;bph=0;bsn=0;bsd=0;nbT=0;bk=0;bossT=1e9;done=false;E=[];spawnT=1.2;goal=WV.KILLS;if(MP.on)cur.l=n;flag=null;
+  ban('🌊 الموجة '+ar(n)+(WV.endless&&!MP.on?'':' من '+ar(WV.N))+' — اقتل '+ar(WV.KILLS)+' وحش ثم '+(NB()>1?ar(NB())+' زعماء':'زعيم'));sfx(520,.3,'triangle',.8);mpSend({t:'wn',n})}
+function wvDone(){if(WV.endless&&!MP.on&&!WV.wd){meta.coins+=10+WV.n*2;saveGame()}WV.wd=1;mpSend({t:'wd',n:WV.n});sfx(900,.3,'triangle',.7);ban('✅ أنهيت الموجة '+ar(WV.n)+(!MP.on||WV.pwd>=WV.n||MP.pd?'':' — بانتظار صاحبك'))}
 function wvCheck(){
   if(!WV.on||!WV.wd||WV.im>0)return;
   if(MP.on&&(MP.end||MP.dead))return;
   if(!MP.on||WV.pwd>=WV.n||MP.pd){
-    if(WV.n>=WV.N){WV.on=0;done=true;if(MP.on)mpEnd('win');else winLevel()}
+    if(WV.n>=WV.N&&!(WV.endless&&!MP.on)){WV.on=0;done=true;if(MP.on)mpEnd('win');else winLevel()}
     else{WV.im=4;ban('⏭️ الموجة '+ar(WV.n+1)+' بعد لحظات...');sfx(600,.2,'triangle',.6)}}}
 function wvTick(dt){
   if(!WV.on||(MP.on&&MP.dead))return;
@@ -534,9 +540,9 @@ function wvTick(dt){
 /* وضع فردي (جنوني فقط): نفس نظام الموجات */
 function soloWv(dt){if(MP.on||!WV.on||mode!='play'||over||done||rotNeed||paused)return;wvTick(dt)}
 const _sl=startLevel;startLevel=function(w,l){_sl(w,l);if(MP.on)return;
-  WV.on=0;WV.cd=0;WV.im=0;WV.wd=0;WV.pwd=0;WV.n=1;
+  WV.on=0;WV.cd=0;WV.im=0;WV.wd=0;WV.pwd=0;WV.n=1;WV.endless=ENDLESS;
   {WV.KILLS=crazy()?20:10;WV.on=1;WV.cd=5;P.inv.e+=50;P.inv.g+=50;P.inv.m+=50;spawnT=1e3;sfx(700,.3,'square',.6)}};
-const _sm=showMenu;showMenu=function(){_sm();if(!MP.on)WV.on=0};
+const _sm=showMenu;showMenu=function(){_sm();ENDLESS=0;if(!MP.on)WV.on=0};
 function wvRR(x,y,w,h,r){ctx.beginPath();if(ctx.roundRect)ctx.roundRect(x,y,w,h,r);else ctx.rect(x,y,w,h)}
 function wvTx(t,px,fill,stroke,x,y){ctx.font='bold '+Math.round(px)+'px system-ui,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
   if(stroke){ctx.lineWidth=Math.max(2,px/5);ctx.strokeStyle=stroke;ctx.lineJoin='round';ctx.strokeText(t,x,y)}ctx.fillStyle=fill;ctx.fillText(t,x,y)}
@@ -555,9 +561,9 @@ function wvDraw(u,tp){
   if(hp>0){const gr=ctx.createLinearGradient(0,y0,0,y0+h1),c=hp>.5?['#9dffb4','#1fb34a']:hp>.25?['#ffe08a','#d99a1c']:['#ff9a9a','#c21f2f'];gr.addColorStop(0,c[0]);gr.addColorStop(1,c[1]);ctx.fillStyle=gr;const bw=Math.max(8*u,pw*hp);wvRR(x0,y0,bw,h1,7*u);ctx.fill();ctx.fillStyle='#ffffff40';wvRR(x0+3*u,y0+3*u,Math.max(2,bw-6*u),h1*.28,3*u);ctx.fill()}
   if(dead)wvTx('👁️ '+(MP.op||'صاحبك'),15*u,'#fff','#04140a',W/2,y0+h1/2+1);else wvPx('SHIP HEALTH',12*u,'#fff','#04301a',W/2,y0+h1/2+1);
   /* شارة الموجة + مسار الوحوش */
-  const y1=y0+h1+9*u,h2=28*u,bw=116*u,tx=x0+bw+6*u,tw=pw-bw-6*u,bossP=bph&&!dead;
+  const y1=y0+h1+9*u,h2=28*u,bw=124*u,tx=x0+bw+6*u,tw=pw-bw-6*u,bossP=bph&&!dead;
   wvRR(x0,y1,bw,h2,7*u);{const gr=ctx.createLinearGradient(0,y1,0,y1+h2);gr.addColorStop(0,'#eef2f8');gr.addColorStop(1,'#98a4bb');ctx.fillStyle=gr;ctx.fill();ctx.lineWidth=2*u;ctx.strokeStyle='#3b4560';ctx.stroke()}
-  wvPx('WAVE '+WV.n+'/'+WV.N,10*u,'#1c2640',null,x0+bw/2,y1+h2/2+1);
+  wvPx('WAVE '+WV.n+(WV.endless&&!MP.on?'':'/'+WV.N),10*u,'#1c2640',null,x0+bw/2,y1+h2/2+1);
   wvRR(tx,y1,tw,h2,13*u);{const gr=ctx.createLinearGradient(0,y1,0,y1+h2);gr.addColorStop(0,bossP?'#6b1a2a':'#3d1c70');gr.addColorStop(1,bossP?'#34101a':'#1f0f45');ctx.fillStyle=gr;ctx.fill();ctx.lineWidth=2*u;ctx.strokeStyle=bossP?'#ff8a9a':'#b48cff';ctx.stroke()}
   if(bossP){const nb=NB(),st=(tw-24*u)/nb;for(let i=0;i<nb;i++)wvAl(tx+12*u+st*(i+.5),y1+h2/2,22*u,'#ff5a6a','#2a0a12',(WV.wd||i<bsd)?.22:1)}
   else{const N=WV.KILLS,st=(tw-20*u)/N,sz=Math.min(15*u,st*.95),ok=WV.wd?N:Math.min(N,Math.floor(kills));for(let i=0;i<N;i++)wvAl(tx+10*u+st*(i+.5),y1+h2/2,sz,'#b86bff','#1a0a3a',i<ok?.2:1)}
@@ -673,7 +679,7 @@ function mpStart(d){
   if(MP.how&&MP.how!='pub'&&d.op)mpFrAdd(d.op);MP.how='';
   const r0=CFG.reset;CFG.reset=1;startLevel(Math.min(d.lv[0],PL.length-1),d.lv[1]);CFG.reset=r0;
   NOE=d.m=='vs'?1:0;if(NOE){E=[];flag={x:0,y:-1600}}P.x=(d.m=='vs'?220:60)*(d.side?1:-1);P.y=0;MP.lk=kills;$('mpi').style.display='block';
-  WV.on=d.m=='coop'?1:0;WV.KILLS=crazy()?20:10;WV.n=1;WV.cd=0;WV.im=0;WV.wd=0;WV.pwd=0;
+  WV.endless=0;WV.on=d.m=='coop'?1:0;WV.KILLS=crazy()?20:10;WV.n=1;WV.cd=0;WV.im=0;WV.wd=0;WV.pwd=0;
   if(WV.on){WV.cd=5;P.inv.e+=50;P.inv.g+=50;P.inv.m+=50;spawnT=1e3;sfx(700,.3,'square',.6)}
   ban(d.m=='vs'?'⚔️ ضد '+MP.op+' — أول من يصل للعلم 🚩 يفوز (فوق)':'🤝 مع '+MP.op+' · '+(d.side?'المضيف: '+MP.op:'أنت المضيف 👑')+' · الصعوبة: '+(DFN[CFG.diff]||''))}
 const _sg=saveGame;saveGame=function(){if(!MP.lock)_sg()};
